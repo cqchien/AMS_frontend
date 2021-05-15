@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'dva';
 import { Form, Icon, Input, Button } from 'antd';
 import styles from './index.less';
-import LogoImage from '../../../public/slack.svg';
 
 @connect()
 class AdminSignIn extends React.Component {
   formRef = React.createRef();
 
-  handleSubmit = values => {
+  handleSubmit = (values) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'admin/signIn',
@@ -19,8 +18,8 @@ class AdminSignIn extends React.Component {
   render() {
     return (
       <div className={styles.rectangle}>
-        <div className={styles.logo}>
-          <img src={LogoImage} alt="Logo Geek Up" />
+        <div className={styles.appName}>
+          <p style={{ marginBottom: '0' }}>Apollo</p>
         </div>
         <Form
           id="admin-login-form"
@@ -30,11 +29,11 @@ class AdminSignIn extends React.Component {
         >
           <Form.Item
             name="email"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: 'Please input your email!' }]}
           >
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Username"
+              placeholder="email"
             />
           </Form.Item>
           <Form.Item
