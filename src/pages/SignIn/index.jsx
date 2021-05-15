@@ -10,7 +10,7 @@ class AdminSignIn extends React.Component {
   handleSubmit = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'admin/signIn',
+      type: 'login/login',
       payload: values,
     });
   };
