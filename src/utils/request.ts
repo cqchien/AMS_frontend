@@ -1,6 +1,6 @@
-/** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import config from '../../config/api'
 
 const codeMessage: { [status: number]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -20,7 +20,7 @@ const codeMessage: { [status: number]: string } = {
   504: '网关超时。',
 };
 
-/** 异常处理程序 */
+/** Exception handler */
 const errorHandler = (error: { response: Response }): Response => {
   const { response } = error;
   if (response && response.status) {
@@ -28,22 +28,23 @@ const errorHandler = (error: { response: Response }): Response => {
     const { status, url } = response;
 
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
+      message: `Request error ${status}: ${url}`,
       description: errorText,
     });
   } else if (!response) {
     notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
+      description: 'You cannot connect to the server',
+      message: 'Network Anomaly',
     });
   }
   return response;
 };
 
-/** 配置request请求时的默认参数 */
+/** Configure the default parameters of the request request */
 const request = extend({
-  errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  errorHandler,
+  prefix: config.BASE_API_URL,
+  credentials: 'omit',
 });
 
 export default request;

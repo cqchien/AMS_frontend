@@ -7,7 +7,7 @@ export type LoginParamsType = {
 };
 
 export async function login(params: LoginParamsType) {
-  return request('/auth/login/', {
+  return request('auth/login/', {
     method: 'POST',
     data: params,
   });

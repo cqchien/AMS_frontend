@@ -4,7 +4,6 @@ import { history } from 'umi';
 
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
-import { message } from 'antd';
 import { login } from '@/services/login';
 
 export type StateType = {
@@ -34,35 +33,17 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(login, payload);
+      const response = yield call(login, { ...payload, isMobileApp: false });
       console.log(response);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // // Login successfully
-      // if (response.status === 'ok') {
-      //   const urlParams = new URL(window.location.href);
-      //   const params = getPageQuery();
-      //   message.success('🎉 🎉 🎉  登录成功！');
-      //   let { redirect } = params as { redirect: string };
-      //   if (redirect) {
-      //     const redirectUrlParams = new URL(redirect);
-      //     if (redirectUrlParams.origin === urlParams.origin) {
-      //       redirect = redirect.substr(urlParams.origin.length);
-      //       if (window.routerBase !== '/') {
-      //         redirect = redirect.replace(window.routerBase, '/');
-      //       }
-      //       if (redirect.match(/^\/.*#/)) {
-      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
-      //       }
-      //     } else {
-      //       window.location.href = '/';
-      //       return;
-      //     }
-      //   }
-      //   history.replace(redirect || '/');
-      // }
+      // Login successfully
+      // yield put({
+      //   type: 'changeLoginStatus',
+      //   payload: response,
+      // });
+      // yield setToken(response.token.accessToken);
+      // yield setAuthority('admin');
+      // yield reloadAuthorized();
+      // router.push('/administration/application-management');
     },
 
     logout() {
