@@ -5,21 +5,37 @@
     component: '../layouts/AdminLayout',
     routes: [
       {
-        name: 'Sign In',
-        path: '/',
+        name: 'Log In',
+        path: '/login',
         component: './SignIn',
+      },
+      {
+        path: '/',
+        component: '../layouts/BasicLayout',
+        authority: ['admin', 'teacher'],
+        routes: [
+          {
+            path: '/',
+            redirect: '/welcome',
+          },
+          {
+            path: '/welcome',
+            name: 'welcome',
+            icon: 'smile',
+            component: './Welcome',
+          },
+        ]
+        // path: '/',
+        // component: '../layouts/BasicLayout',
+        // routes: [
+        //   {
+        //     name: 'Class Management',
+        //     path: '/class-management',
+        //     component: './ClassManagement',
+        //     iconPath: '/fast.svg',
+        //   }
+        // ]
       }
-      // {
-      //   path: '/user',
-      //   component: '../layouts/UserLayout',
-      //   routes: [
-      //     {
-      //       name: 'login',
-      //       path: '/user/login',
-      //       component: './User/login',
-      //     },
-      //   ],
-      // },
       // {
       //   path: '/',
       //   component: '../layouts/SecurityLayout',

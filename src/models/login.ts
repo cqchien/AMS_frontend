@@ -1,49 +1,50 @@
 import { stringify } from 'querystring';
-import type { Reducer, Effect } from 'umi';
+import type { Effect } from 'umi';
 import { history } from 'umi';
 
-import { setAuthority } from '@/utils/authority';
+import { setAuthority, setToken } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { login } from '@/services/login';
 
-export type StateType = {
-  status?: 'ok' | 'error';
-  type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
-};
-
 export type LoginModelType = {
   namespace: string;
-  state: StateType;
   effects: {
     login: Effect;
     logout: Effect;
   };
-  reducers: {
-    changeLoginStatus: Reducer<StateType>;
-  };
+  reducers: {};
 };
 
 const Model: LoginModelType = {
   namespace: 'login',
 
-  state: {
-    status: undefined,
-  },
-
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload }, { call }) {
       const response = yield call(login, { ...payload, isMobileApp: false });
-      console.log(response);
       // Login successfully
-      // yield put({
-      //   type: 'changeLoginStatus',
-      //   payload: response,
-      // });
-      // yield setToken(response.token.accessToken);
-      // yield setAuthority('admin');
-      // yield reloadAuthorized();
-      // router.push('/administration/application-management');
+      yield setToken(response.token.accessToken);
+      setAuthority(payload.role.toLowerCase());
+      if (response) {
+        const urlParams = new URL(window.location.href);
+        const params = getPageQuery();
+        let { redirect } = params as { redirect: string };
+        if (redirect) {
+          const redirectUrlParams = new URL(redirect);
+          if (redirectUrlParams.origin === urlParams.origin) {
+            redirect = redirect.substr(urlParams.origin.length);
+            if (window.routerBase !== '/') {
+              redirect = redirect.replace(window.routerBase, '/');
+            }
+            if (redirect.match(/^\/.*#/)) {
+              redirect = redirect.substr(redirect.indexOf('#') + 1);
+            }
+          } else {
+            window.location.href = '/';
+            return;
+          }
+        }
+        history.replace(redirect || '/');
+      }
     },
 
     logout() {
@@ -60,16 +61,7 @@ const Model: LoginModelType = {
     },
   },
 
-  reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
-      };
-    },
-  },
+  reducers: {},
 };
 
 export default Model;
