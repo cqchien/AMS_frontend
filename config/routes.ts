@@ -26,7 +26,7 @@
         routes: [
           {
             path: '/management/class',
-            name: 'class',
+            name: 'Class Management',
             icon: 'smile',
             component: './Welcome',
           },

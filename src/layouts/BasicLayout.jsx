@@ -2,7 +2,7 @@ import React from 'react';
 import { getPageTitle, getMenuData } from '@ant-design/pro-layout';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 
-import { Link, Redirect } from 'umi';
+import { Link } from 'umi';
 import { connect } from 'dva';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
@@ -24,7 +24,7 @@ const noMatch = (
     subTitle="Sorry, you are not authorized to access this page."
     extra={
       <Button type="primary">
-        <Link to="/user/signin">Go to sign in page</Link>
+        <Link to="/user/login">Go to sign in page</Link>
       </Button>
     }
   />
@@ -46,12 +46,9 @@ const BasicLayout = (props) => {
     title: defaultSettings.title,
   });
 
-  const { pathname } = window.location;
-  const authority = localStorage.getItem('authority');
-  if (pathname !== '/user/login' && (!authority || !authority.length)) {
-    <Redirect to={'/user/login'} />;
-  } else {
-    <Redirect to={'/management/class'} />;
+  const token = localStorage.getItem('token');
+  if (token && window.location.pathname === 'user/login') {
+    window.location.href = '/management/class';
   }
 
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
