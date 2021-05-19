@@ -6,8 +6,15 @@ import { setAuthority, setToken } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { login } from '@/services/login';
 
+export type StateType = {
+  status?: 'ok' | 'error';
+  type?: string;
+  currentAuthority?: 'user' | 'guest' | 'admin';
+};
+
 export type LoginModelType = {
   namespace: string;
+  state: StateType;
   effects: {
     login: Effect;
     logout: Effect;
@@ -18,13 +25,18 @@ export type LoginModelType = {
 const Model: LoginModelType = {
   namespace: 'login',
 
+  state: {
+    status: undefined,
+  },
+
   effects: {
     *login({ payload }, { call }) {
-      const response = yield call(login, { ...payload, isMobileApp: false });
+      const response = yield call(login, { ...payload, isMobileApp: false });   
       // Login successfully
-      yield setToken(response.token.accessToken);
-      setAuthority(payload.role.toLowerCase());
-      if (response) {
+      if (response.token) {
+        yield setToken(response.token.accessToken);
+    
+        setAuthority(response.role.toLowerCase());
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
