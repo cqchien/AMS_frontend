@@ -6,7 +6,6 @@ import { Link } from 'umi';
 import { connect } from 'dva';
 import Authorized from '@/utils/Authorized';
 import { Helmet } from 'react-helmet-async';
-import Logo from '../assets/logo.svg';
 import styles from './ManagementLayout.less';
 import AdminSignOut from './LogOut/LogOut';
 import defaultSettings from '../../config/defaultSettings';
@@ -16,7 +15,7 @@ import defaultSettings from '../../config/defaultSettings';
   settings,
 }))
 class ManagementLayout extends React.Component {
-  handleMenuCollapse = payload => {
+  handleMenuCollapse = (payload) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'global/changeLayoutCollapsed',
@@ -51,8 +50,8 @@ class ManagementLayout extends React.Component {
     });
 
     // let currentPageName = '';
-    const menuDataRender = menuList =>
-      menuList.map(item => {
+    const menuDataRender = (menuList) =>
+      menuList.map((item) => {
         if (item.hidden) return;
         const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
         // if (window.location.href.includes(localItem.path)) {
@@ -86,7 +85,9 @@ class ManagementLayout extends React.Component {
           // )}
           menuHeaderRender={() => (
             <div>
-              <img src={Logo} alt="talaria logo" className={styles.adminLayoutLogo} />
+              <div className={styles.appName}>
+                <p style={{ marginBottom: '0' }}>Apollo</p>
+              </div>
             </div>
           )}
           // breadcrumbRender={(routers = []) => [

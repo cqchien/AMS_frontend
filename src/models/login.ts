@@ -31,12 +31,12 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call }) {
-      const response = yield call(login, { ...payload, isMobileApp: false });   
+      const response = yield call(login, { ...payload, isMobileApp: false });
       // Login successfully
       if (response.token) {
         yield setToken(response.token.accessToken);
-    
         setAuthority(response.role.toLowerCase());
+        
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -60,6 +60,8 @@ const Model: LoginModelType = {
     },
 
     logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('authority');
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
