@@ -1,23 +1,16 @@
 import React from 'react';
 import { connect } from 'dva';
-// import { router } from 'umi';
+import { Redirect } from 'umi';
 import styles from './AdminLayout.less';
 
-const AdminLayout = props => {
-  // const { pathname } = window.location;
-  // const authority = localStorage.getItem('authority');
-  // if (pathname !== '/admin/signin' && (!authority || !authority.length)) {
-  //   router.push('/admin/signin');
-  // } else if (window.location.pathname === '/admin') {
-  //   const authorityJson = JSON.parse(authority);
-  //   if (authorityJson && authorityJson.length && authorityJson[0] === 'admin') {
-  //     router.push('/administration/contact-management');
-  //   } else if (authorityJson && authorityJson.length && authorityJson[0] === 'application') {
-  //     router.push('/application/dashboard');
-  //   } else {
-  //     router.push('/application/dashboard');
-  //   }
-  // }
+const AdminLayout = (props) => {
+  const { pathname } = window.location;
+  const authority = localStorage.getItem('authority');
+  if (pathname !== '/user/login' && (!authority || !authority.length)) {
+    <Redirect to={'/user/login'} />;
+  } else {
+    <Redirect to={'/management/class'} />;
+  }
 
   const { children } = props;
   return (
