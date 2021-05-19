@@ -26,12 +26,24 @@
         routes: [
           {
             path: '/management/class',
-            name: 'Class Management',
-            icon: 'smile',
+            name: 'Class',
+            iconPath: '/calendar.svg',
             component: './Welcome',
           },
-        ]
-      }
+          {
+            path: '/management/teacher',
+            name: 'Teacher',
+            iconPath: '/rocket.svg',
+            component: './Welcome',
+          },
+          {
+            path: '/management/account',
+            name: 'Account',
+            iconPath: '/fast.svg',
+            component: './Welcome',
+          },
+        ],
+      },
       // {
       //   path: '/',
       //   component: '../layouts/SecurityLayout',
