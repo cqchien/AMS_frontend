@@ -1,40 +1,36 @@
 ﻿export default [
-
   {
-    path: '/',
+    path: '/user',
     component: '../layouts/AdminLayout',
     routes: [
       {
-        name: 'Log In',
-        path: '/login',
+        name: 'User Sign In',
+        path: '/user/login',
         component: './SignIn',
       },
+    ],
+  },
+  {
+    path: '/',
+    component: '../layouts/BasicLayout',
+    routes: [
       {
         path: '/',
-        component: '../layouts/BasicLayout',
-        authority: ['admin', 'teacher'],
+        redirect: '/management/class',
+      },
+      {
+        path: '/management',
+        name: 'Management',
+        component: '../layouts/ManagementLayout',
+        authority: ['admin', 'teacher', 'trainingroom'],
         routes: [
           {
-            path: '/',
-            redirect: '/welcome',
-          },
-          {
-            path: '/welcome',
-            name: 'welcome',
+            path: '/management/class',
+            name: 'class',
             icon: 'smile',
             component: './Welcome',
           },
         ]
-        // path: '/',
-        // component: '../layouts/BasicLayout',
-        // routes: [
-        //   {
-        //     name: 'Class Management',
-        //     path: '/class-management',
-        //     component: './ClassManagement',
-        //     iconPath: '/fast.svg',
-        //   }
-        // ]
       }
       // {
       //   path: '/',
