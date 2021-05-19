@@ -31,11 +31,12 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call }) {
-      const response = yield call(login, { ...payload, isMobileApp: false });      // Login successfully
-      yield setToken(response.token.accessToken);
-  
-      setAuthority(response.role.toLowerCase());
-      if (response) {
+      const response = yield call(login, { ...payload, isMobileApp: false });   
+      // Login successfully
+      if (response.token) {
+        yield setToken(response.token.accessToken);
+    
+        setAuthority(response.role.toLowerCase());
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
