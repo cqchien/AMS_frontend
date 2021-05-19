@@ -32,7 +32,8 @@ export default defineConfig({
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
-    'primary-color': defaultSettings.primaryColor,
+    'layout-header-background': '#373D48',
+    'primary-color': '#33B3AB',
   },
   title: false,
   ignoreMomentLocale: true,
