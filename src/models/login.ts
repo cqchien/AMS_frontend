@@ -6,8 +6,15 @@ import { setAuthority, setToken } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { login } from '@/services/login';
 
+export type StateType = {
+  status?: 'ok' | 'error';
+  type?: string;
+  currentAuthority?: 'user' | 'guest' | 'admin';
+};
+
 export type LoginModelType = {
   namespace: string;
+  state: StateType;
   effects: {
     login: Effect;
     logout: Effect;
@@ -18,12 +25,16 @@ export type LoginModelType = {
 const Model: LoginModelType = {
   namespace: 'login',
 
+  state: {
+    status: undefined,
+  },
+
   effects: {
     *login({ payload }, { call }) {
-      const response = yield call(login, { ...payload, isMobileApp: false });
-      // Login successfully
+      const response = yield call(login, { ...payload, isMobileApp: false });      // Login successfully
       yield setToken(response.token.accessToken);
-      setAuthority(payload.role.toLowerCase());
+  
+      setAuthority(response.role.toLowerCase());
       if (response) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
