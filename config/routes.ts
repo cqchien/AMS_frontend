@@ -28,7 +28,7 @@
             path: '/management/class',
             name: 'Class',
             iconPath: '/calendar.svg',
-            component: './Welcome',
+            component: './ClassManagement',
           },
           {
             path: '/management/teacher',
