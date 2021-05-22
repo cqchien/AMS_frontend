@@ -113,7 +113,7 @@ class ClassManagement extends React.Component {
             />
           ) : null}
 
-          <TableClass onShowInfor={this.showDrawer} getClassID={this.showClassID} />
+          <TableClass />
         </div>
       </>
     );
