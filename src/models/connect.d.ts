@@ -15,7 +15,7 @@ export type Loading = {
     setting?: boolean;
     user?: boolean;
     login?: boolean;
-    class?: boolean;
+    classRoom?: boolean;
   };
 };
 
@@ -25,7 +25,7 @@ export type ConnectState = {
   settings: ProSettings;
   user: UserModelState;
   login: StateType;
-  class: ClassRoomModelState;
+  classRoom: ClassRoomModelState;
 };
 
 export type Route = {

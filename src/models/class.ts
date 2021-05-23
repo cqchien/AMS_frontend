@@ -1,5 +1,5 @@
 import { getAllClasses } from '@/services/class';
-import { Effect, Reducer } from './../.umi/plugin-dva/connect';
+import type { Effect, Reducer } from './../.umi/plugin-dva/connect';
 
 export type ClassRoom = {
   id?: string;
@@ -12,38 +12,56 @@ export type ClassRoom = {
   qrCode?: string;
 };
 
+export type MetaData = {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  itemCount: number;
+  page: number;
+  pageCount: number;
+  take: number;
+};
+
 export type ClassRoomModelState = {
   classRooms?: ClassRoom[];
+  meta?: MetaData;
 };
 
 export type ClassRoomModelType = {
-  namespace: 'class';
+  namespace: 'classRoom';
   state: ClassRoomModelState;
   effects: {
     getAllClasses: Effect;
   };
   reducers: {
-    // showListClass: Reducer<ClassRoomModelState>;
+    showListClass: Reducer<ClassRoomModelState>;
   };
 };
 
 const ClassRoomModel: ClassRoomModelType = {
-  namespace: 'class',
+  namespace: 'classRoom',
 
   state: {
     classRooms: [],
   },
 
   effects: {
-    *getAllClasses({payload}, { call, put }) {
+    *getAllClasses({ payload }, { call, put }) {
       const response = yield call(getAllClasses, payload);
-      console.log(response);
+      yield put({
+        type: 'showListClass',
+        payload: response,
+      });
     },
   },
 
   reducers: {
-    // showListClass(state, action) {
-    // }
+    showListClass(state, { payload }) {
+      return {
+        ...state,
+        classRooms: payload.data,
+        meta: payload.meta,
+      };
+    },
   },
 };
 

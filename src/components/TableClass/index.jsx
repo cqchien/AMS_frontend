@@ -2,12 +2,11 @@ import React from 'react';
 import { Table, message } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import ActionContact from './ActionContact';
 
 const { Column } = Table;
-@connect(({ admin, loading }) => {
+@connect(({ classRoom, loading }) => {
   return {
-    // listContact: admin.contact,
+    listClasses: classRoom.classRooms,
     // listContactMerge: admin.listContactMerge,
     // tags: admin.tags,
     // isLoadingTableContact: loading.effects['admin/queryContacts'],
@@ -22,34 +21,35 @@ class TableContact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      skip: 1,
-      PAGE_SIZE: 10,
+      order: 'ASC',
+      page: 1,
+      take: 10,
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'admin/queryContacts',
-    //   payload: {
-    //     search: '',
-    //     status: this.props.currentState,
-    //     skip: this.state.skip,
-    //     limit: this.state.PAGE_SIZE,
-    //   },
-    // });
-  }
-
-  search = (e) => {
-    const { dispatch } = this.props;
     dispatch({
-      type: 'admin/searchContact',
+      type: 'classRoom/getAllClasses',
       payload: {
-        keyword: e.target.value,
-        status: this.state.currentState,
+        order: this.state.order,
+        page: this.state.page,
+        take: this.state.take,
+        isFinish: false,
       },
     });
-  };
+  }
+
+  // search = (e) => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'class/getAllClasses',
+  //     payload: {
+  //       keyword: e.target.value,
+  //       status: this.state.currentState,
+  //     },
+  //   });
+  // };
 
   handleClickRow = (id) => {
     this.props.onShowInfor();
@@ -90,25 +90,8 @@ class TableContact extends React.Component {
   };
 
   render() {
-    const listClass = [
-      {
-        "id": "b131c259-7d80-48df-96cb-e9f7ed064b5b",
-        "createdAt": "2021-05-03T02:27:27.448Z",
-        "updatedAt": "2021-05-03T02:27:27.448Z",
-        "deletedAt": null,
-        "courseCode": "MIS242.CTTT.L21",
-        "type": "THEORY",
-        "desc": "string",
-        "room": "E4.1",
-        "startTime": "2021-03-04T17:00:00.000Z",
-        "endTime": "2021-05-04T17:00:00.000Z",
-        "qrCode": null,
-        "teacher": {
-          "name": "Cao Chien"
-        }
-      },
-    ]
-    const listClassToRender = listClass.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
+    const { listClasses } = this.props;
+    const listClassToRender = listClasses.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
     return (
       <div>
         <div>
@@ -143,25 +126,14 @@ class TableContact extends React.Component {
               title="Start Time"
               dataIndex="startTime"
               key="startTime"
-              sorter={(firstDate, secondDate) => {
-                return moment(firstDate.startTime) - moment(secondDate.startTime);
-              }}
-              sortDirections={['descend', 'ascend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
             />
             <Column
               title="End Time"
               dataIndex="endTime"
               key="endTime"
-              sorter={(firstDate, secondDate) => {
-                return moment(firstDate.endTime) - moment(secondDate.endTime);
-              }}
-              sortDirections={['descend', 'ascend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
             />
-            
-            
-            
           </Table>
         </div>
       </div>
