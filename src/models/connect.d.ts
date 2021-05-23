@@ -1,9 +1,10 @@
+import type { ClassRoomModelState } from './class';
 import type { MenuDataItem, Settings as ProSettings } from '@ant-design/pro-layout';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
 import type { StateType } from './login';
 
-export { GlobalModelState, UserModelState };
+export { GlobalModelState, UserModelState, ClassRoomModelState };
 
 export type Loading = {
   global: boolean;
@@ -14,6 +15,7 @@ export type Loading = {
     setting?: boolean;
     user?: boolean;
     login?: boolean;
+    classRoom?: boolean;
   };
 };
 
@@ -23,6 +25,7 @@ export type ConnectState = {
   settings: ProSettings;
   user: UserModelState;
   login: StateType;
+  classRoom: ClassRoomModelState;
 };
 
 export type Route = {
