@@ -7,14 +7,7 @@ const { Column } = Table;
 @connect(({ classRoom, loading }) => {
   return {
     listClasses: classRoom.classRooms,
-    // listContactMerge: admin.listContactMerge,
-    // tags: admin.tags,
     isLoadingTableClass: loading.effects['classRoom/getAllClasses'],
-    // isLoadingTags: loading.effects['admin/getAllTags'],
-    // isLoadingSearchContact: loading.effects['admin/searchContact'],
-    // isLoadingGetAllContacts: loading.effects['admin/getAllContacts'],
-    // currentState: admin.currentState,
-    // totalContact: admin.totalContact,
   };
 })
 class TableContact extends React.Component {

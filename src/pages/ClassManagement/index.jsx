@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-// import DrawerForm from '@/components/NewClass/Class';
+import FilterClass from '@/components/TableClass/FilterClass';
 import TableClass from '@/components/TableClass';
 import HeaderLayout from '@/components/Header';
 import styles from './ClassManagement.less';
@@ -75,7 +75,7 @@ class ClassManagement extends React.Component {
         <div className={styles.applicationManagementContainer}>
           <div className={styles.applicationHeader}>
             <div>
-              {/* <FilterClasss /> */}
+              <FilterClass />
             </div>
             <div className={styles.applicationManagementHeader}>
               <Button
