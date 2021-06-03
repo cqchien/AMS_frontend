@@ -5,22 +5,22 @@ import styles from './index.less';
 
 @connect(({ admin, loading }) => {
   return {
-    listContact: admin.contact,
-    listContactMerge: admin.listContactMerge,
-    tags: admin.tags,
-    isLoadingTableContact: loading.effects['admin/queryContacts'],
-    isLoadingTags: loading.effects['admin/getAllTags'],
-    isLoadingSearchContact: loading.effects['admin/searchContact'],
-    currentState: admin.currentState,
+    // listContact: admin.contact,
+    // listContactMerge: admin.listContactMerge,
+    // tags: admin.tags,
+    // isLoadingTableContact: loading.effects['admin/queryContacts'],
+    // isLoadingTags: loading.effects['admin/getAllTags'],
+    // isLoadingSearchContact: loading.effects['admin/searchContact'],
+    // currentState: admin.currentState,
   };
 })
-class FilterContacts extends React.Component {
+class FilterClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  search = e => {
+  search = (e) => {
     const { dispatch, currentState } = this.props;
     if (currentState === 'Duplicate') {
       dispatch({
@@ -42,7 +42,7 @@ class FilterContacts extends React.Component {
     }
   };
 
-  onChangeFilterContact = e => {
+  onChangeFilterContact = (e) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'admin/queryContacts',
@@ -63,38 +63,33 @@ class FilterContacts extends React.Component {
     const { currentState } = this.props;
 
     return (
-      <div>
+      <div style={{ display: 'flex' }}>
         <Input.Search
           allowClear
-          placeholder="Search by Name, Email or Phone"
+          placeholder="Search by Email or Course Code"
           onPressEnter={this.search}
           className={styles.search}
-          style={{ width: '416px' }}
-          loading={this.props.isLoadingSearchContact}
+          style={{ width: '416px' , marginRight: '20px'}}
+          // loading={this.props.isLoadingSearchContact}
         />
-        <div className={styles.containerFilter}>
-          <Radio.Group
-            style={{ display: 'flex' }}
-            value={currentState}
-            onChange={this.onChangeFilterContact}
-          >
-            <Radio.Button className={styles.btnFilter} value="ACTIVE">
-              Active
-            </Radio.Button>
-            <Radio.Button className={styles.btnFilter} value="ARCHIVE">
-              Archive
-            </Radio.Button>
-            <Radio.Button className={styles.btnFilter} value="">
-              All
-            </Radio.Button>
-            <Radio.Button className={styles.btnFilter} value="Duplicate">
-              Duplicate
-            </Radio.Button>
-          </Radio.Group>
-        </div>
+        <Radio.Group
+          style={{ display: 'flex' }}
+          value={currentState}
+          onChange={this.onChangeFilterContact}
+        >
+          <Radio.Button className={styles.btnFilter} value="ACTIVE">
+            Active
+          </Radio.Button>
+          <Radio.Button className={styles.btnFilter} value="FINISH">
+            Finish
+          </Radio.Button>
+          <Radio.Button className={styles.btnFilter} value="">
+            All
+          </Radio.Button>
+        </Radio.Group>
       </div>
     );
   }
 }
 
-export default FilterContacts;
+export default FilterClass;

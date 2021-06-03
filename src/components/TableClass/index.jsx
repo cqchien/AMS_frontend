@@ -7,14 +7,7 @@ const { Column } = Table;
 @connect(({ classRoom, loading }) => {
   return {
     listClasses: classRoom.classRooms,
-    // listContactMerge: admin.listContactMerge,
-    // tags: admin.tags,
-    // isLoadingTableContact: loading.effects['admin/queryContacts'],
-    // isLoadingTags: loading.effects['admin/getAllTags'],
-    // isLoadingSearchContact: loading.effects['admin/searchContact'],
-    // isLoadingGetAllContacts: loading.effects['admin/getAllContacts'],
-    // currentState: admin.currentState,
-    // totalContact: admin.totalContact,
+    isLoadingTableClass: loading.effects['classRoom/getAllClasses'],
   };
 })
 class TableContact extends React.Component {
@@ -104,11 +97,9 @@ class TableContact extends React.Component {
             //   onChange: this.onChangePaging,
             // }}
             bordered
-            // loading={
-            //   this.props.isLoadingTags ||
-            //   this.props.isLoadingTableContact ||
-            //   this.props.isLoadingGetAllContacts
-            // }
+            loading={
+              this.props.isLoadingTableClass
+            }
           >
             <Column
               width={250}
