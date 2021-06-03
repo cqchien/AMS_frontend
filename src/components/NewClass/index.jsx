@@ -1,66 +1,37 @@
 import React from 'react';
-import { Drawer, Form, Input, Tooltip, Select, Button, Radio, Spin } from 'antd';
+import { Drawer, Form, Input, Tooltip, Select, Button, Radio, Spin, DatePicker } from 'antd';
 import { connect } from 'dva';
-import debounce from 'lodash/debounce';
 import style from './class.less';
-// import LinkedContact from '../LinkedContact';
+import moment from 'moment';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-@connect((state) => {
-  return {};
-})
+@connect(({ loading }) => ({
+  isCreateClass: loading.effects['classRoom/createNewClass'],
+}))
 class ClassForm extends React.Component {
   formRef = React.createRef();
 
-  constructor(props) {
-    super(props);
-    this.fetchContactsByFullName = debounce(this.fetchContactsByFullName, 500);
-  }
-
   componentDidMount() {
     // const { dispatch, listContact } = this.props;
-    // const search = listContact.find(contact => contact.id === this.props.contactID);
     // dispatch({ type: 'admin/getAllContacts' });
     // dispatch({ type: 'admin/getAllTags' });
     // dispatch({
     //   type: 'admin/fetchFilteredContactsByFullName',
-    //   payload: {
-    //     search: search?.referrer?.fullName,
-    //     status: '',
-    //     skip: 1,
-    //     limit: 20,
-    //   },
-    // });
+    //      // const search = listContact.find(contact => contact.id === this.props.contactID);
   }
 
   handleSubmit = (values) => {
     const { dispatch } = this.props;
-    const newValues = { ...values, status: 'ACTIVE' };
-    if (this.props.contactID) {
-      const data = { newValues, id: this.props.contactID };
-      dispatch({
-        type: 'admin/updateContact',
-        payload: data,
-      });
-    } else {
-      dispatch({
-        type: 'admin/sendNewContact',
-        payload: newValues,
-      });
-    }
-  };
+    const formValues = { ...values };
 
-  fetchContactsByFullName = (textSearch) => {
-    const { dispatch } = this.props;
     dispatch({
-      type: 'admin/fetchFilteredContactsByFullName',
+      type: 'classRoom/createNewClass',
       payload: {
-        search: textSearch,
-        status: '',
-        skip: 1,
-        limit: 20,
+        ...formValues,
+        startTime: moment(formValues.startTime).format('DD/MM/YYYY'),
+        endTime: moment(formValues.endTime).format('DD/MM/YYYY'),
       },
     });
   };
@@ -80,8 +51,6 @@ class ClassForm extends React.Component {
 
   render() {
     const { visibleClass } = this.props;
-    const contact = [];
-    console.log(visibleClass);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -123,31 +92,20 @@ class ClassForm extends React.Component {
         >
           <Form {...formItemLayout} ref={this.formRef} onFinish={this.handleSubmit}>
             <Form.Item
-              label={
-                <span>
-                  Full Name&nbsp;
-                  <Tooltip title="What do you want others to call you?" />
-                </span>
-              }
-              name="name"
+              label="Course Code"
+              name="courseCode"
               rules={[{ required: true, message: 'Please input your full name' }]}
-              initialValue={contact ? contact.fullName : null}
             >
               <Input />
             </Form.Item>
 
             <Form.Item
-              label="Phone"
-              name="phone"
-              initialValue={contact ? contact.phone : null}
+              label="Room"
+              name="room"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your phone!',
-                },
-                {
-                  pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-                  message: 'Invalid phone number',
+                  message: 'Please input your room!',
                 },
               ]}
             >
@@ -155,51 +113,50 @@ class ClassForm extends React.Component {
             </Form.Item>
 
             <Form.Item
-              name="email"
-              label="E-mail"
+              name="type"
+              label="Type"
               rules={[
                 {
-                  type: 'email',
-                  message: 'The input is not valid E-mail!',
+                  required: true,
                 },
               ]}
-              initialValue={contact ? contact.email : null}
+              initialValue={'THEORY'}
             >
-              <Input />
+              <Select style={{ width: '100%' }}>
+                <Option value={'THEORY'}>Theory</Option>
+                <Option value={'PRACTICE'}>Practice</Option>
+              </Select>
             </Form.Item>
 
             <Form.Item
-              label="Other Channel"
-              name="otherChannel"
-              initialValue={contact ? contact.otherChannel : null}
+              label="Start Time"
+              name="startTime"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
             >
-              <Input />
+              <DatePicker />
             </Form.Item>
             <Form.Item
-              label="Gender"
-              name="gender"
-              initialValue={contact ? contact.gender : 'MALE'}
+              label="End Time"
+              name="endTime"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
             >
-              <Radio.Group>
-                <Radio value="MALE">Male</Radio>
-                <Radio value="FEMALE">Female</Radio>
-                <Radio value="OTHER">Other</Radio>
-              </Radio.Group>
+              <DatePicker />
             </Form.Item>
-
-            <Form.Item
-              label="Source Notes"
-              name="referrerNotes"
-              initialValue={contact ? contact.referrerNotes : null}
-            >
-              <TextArea />
+            <Form.Item name="teacherId" label="Teacher" initialValue={''}>
+              <Select style={{ width: '100%' }}>
+                <Option value={'THEORY'}>Theory</Option>
+                <Option value={'PRACTICE'}>Practice</Option>
+              </Select>
             </Form.Item>
-
-            <Form.Item
-              label="General Notes"
-              name="notes"
-              initialValue={contact ? contact.notes : null}
-            >
+            <Form.Item label="Description" name="desc" initialValue={''}>
               <TextArea />
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
@@ -208,11 +165,11 @@ class ClassForm extends React.Component {
                   Cancel
                 </Button>
                 {this.props.contactID ? (
-                  <Button type="primary" htmlType="submit" >
+                  <Button type="primary" htmlType="submit">
                     Update contact
                   </Button>
                 ) : (
-                  <Button type="primary" htmlType="submit" >
+                  <Button type="primary" htmlType="submit" loading={this.props.isCreateClass}>
                     Create contact
                   </Button>
                 )}

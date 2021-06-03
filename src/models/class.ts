@@ -1,4 +1,4 @@
-import { getAllClasses } from '@/services/class';
+import { getAllClasses, createNewClass } from '@/services/class';
 import type { Effect, Reducer } from './../.umi/plugin-dva/connect';
 
 export type ClassRoom = {
@@ -32,6 +32,7 @@ export type ClassRoomModelType = {
   state: ClassRoomModelState;
   effects: {
     getAllClasses: Effect;
+    createNewClass: Effect;
   };
   reducers: {
     showListClass: Reducer<ClassRoomModelState>;
@@ -54,6 +55,17 @@ const ClassRoomModel: ClassRoomModelType = {
         type: 'showListClass',
         payload: response,
       });
+    },
+
+    *createNewClass({ payload }, { call, put }) {
+      console.log('pay', payload);
+      const response = yield call(createNewClass, payload);
+      if (response) {
+        yield put({
+          type: 'handleVisibleCreateClass',
+          payload: false,
+        });
+      }
     },
   },
 
