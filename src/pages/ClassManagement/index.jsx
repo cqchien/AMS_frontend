@@ -4,12 +4,13 @@ import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import FilterClass from '@/components/TableClass/FilterClass';
 import TableClass from '@/components/TableClass';
+import DrawerForm from '@/components/NewClass';
 import HeaderLayout from '@/components/Header';
 import styles from './ClassManagement.less';
 
-@connect(({ admin, loading }) => ({
-  fetchCurrentAdmin: loading.effects['admin/saveCurrentAdmin'],
-  // visibleClass: admin.visibleCreateClass,
+@connect(({ classRoom }) => ({
+  // fetchCurrentAdmin: loading.effects['user/saveCurrentAdmin'],
+  visibleClass: classRoom.visibleCreateClass,
 }))
 class ClassManagement extends React.Component {
   state = { ClassID: '', visibleMergeClass: false };
@@ -17,7 +18,7 @@ class ClassManagement extends React.Component {
   showDrawer = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'admin/handleVisibleCreateClass',
+      type: 'classRoom/handleVisibleCreateClass',
       payload: true,
     });
   };
@@ -28,7 +29,7 @@ class ClassManagement extends React.Component {
       ClassID: '',
     });
     dispatch({
-      type: 'admin/handleVisibleCreateClass',
+      type: 'classRoom/handleVisibleCreateClass',
       payload: true,
     });
   };
@@ -47,7 +48,7 @@ class ClassManagement extends React.Component {
     });
   };
 
-  showClassID = ID => {
+  showClassID = (ID) => {
     this.setState({
       ClassID: ID,
     });
@@ -83,31 +84,15 @@ class ClassManagement extends React.Component {
                 type="primary"
                 onClick={this.showDrawerCreate}
               >
-                <PlusOutlined size="small" /> Create New Class
-              </Button>
-              <Button
-                style={{ transform: 'translate(22%,-270%)' }}
-                onClick={this.showAddModal}
-                type="primary"
-              >
-                Import
+                <PlusOutlined size="small" /> New Class
               </Button>
             </div>
           </div>
-          {/* <ClassModal
-            {...this.state}
-            cancel={() => this.setState({ modalAddVisible: false })}
-            onReload={this.onReloadTable}
-          /> */}
-
-          {/* <MergeClass
-            {...this.state}
-            cancel={() => this.setState({ visibleMergeClass: false })}
-          /> */}
 
           {visibleClass ? (
             <DrawerForm
               cancel={this.handleCancel}
+              visibleClass={visibleClass}
               ClassID={this.state.ClassID}
               deleteID={this.handleHandleID}
             />

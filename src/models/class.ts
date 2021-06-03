@@ -24,6 +24,7 @@ export type MetaData = {
 export type ClassRoomModelState = {
   classRooms?: ClassRoom[];
   meta?: MetaData;
+  visibleCreateClass?: boolean;
 };
 
 export type ClassRoomModelType = {
@@ -34,6 +35,7 @@ export type ClassRoomModelType = {
   };
   reducers: {
     showListClass: Reducer<ClassRoomModelState>;
+    handleVisibleCreateClass: Reducer<ClassRoomModelState>;
   };
 };
 
@@ -42,6 +44,7 @@ const ClassRoomModel: ClassRoomModelType = {
 
   state: {
     classRooms: [],
+    visibleCreateClass: false,
   },
 
   effects: {
@@ -60,6 +63,13 @@ const ClassRoomModel: ClassRoomModelType = {
         ...state,
         classRooms: payload.data,
         meta: payload.meta,
+      };
+    },
+
+    handleVisibleCreateClass(state, { payload }) {
+      return {
+        ...state,
+        visibleCreateClass: payload,
       };
     },
   },
