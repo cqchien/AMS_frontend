@@ -9,7 +9,7 @@ const { Column } = Table;
     listClasses: classRoom.classRooms,
     // listContactMerge: admin.listContactMerge,
     // tags: admin.tags,
-    // isLoadingTableContact: loading.effects['admin/queryContacts'],
+    isLoadingTableClass: loading.effects['classRoom/getAllClasses'],
     // isLoadingTags: loading.effects['admin/getAllTags'],
     // isLoadingSearchContact: loading.effects['admin/searchContact'],
     // isLoadingGetAllContacts: loading.effects['admin/getAllContacts'],
@@ -104,11 +104,9 @@ class TableContact extends React.Component {
             //   onChange: this.onChangePaging,
             // }}
             bordered
-            // loading={
-            //   this.props.isLoadingTags ||
-            //   this.props.isLoadingTableContact ||
-            //   this.props.isLoadingGetAllContacts
-            // }
+            loading={
+              this.props.isLoadingTableClass
+            }
           >
             <Column
               width={250}
