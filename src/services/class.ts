@@ -15,6 +15,8 @@ export type CreateClassParamsType = {
   startTime: string;
   endTime: string;
   teacher: string;
+  qrCode: string;
+  QRCreatedAt: string;
 };
 export async function getAllClasses(params: GetClassesParamsType): Promise<any> {
   return request('class', {
@@ -24,7 +26,6 @@ export async function getAllClasses(params: GetClassesParamsType): Promise<any> 
 }
 
 export async function createNewClass(params: CreateClassParamsType): Promise<any> {
-  console.log('para', params);
   return request('class', {
     method: 'POST',
     data: params,

@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import { getAllClasses, createNewClass } from '@/services/class';
 import type { Effect, Reducer } from './../.umi/plugin-dva/connect';
 
@@ -58,9 +59,12 @@ const ClassRoomModel: ClassRoomModelType = {
     },
 
     *createNewClass({ payload }, { call, put }) {
-      console.log('pay', payload);
       const response = yield call(createNewClass, payload);
-      if (response) {
+      if (response.courseCode) {
+        notification.success({
+          description: 'Create new class successfully.',
+          message: 'Create Successfully',
+        });
         yield put({
           type: 'handleVisibleCreateClass',
           payload: false,

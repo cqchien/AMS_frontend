@@ -30,8 +30,8 @@ class ClassForm extends React.Component {
       type: 'classRoom/createNewClass',
       payload: {
         ...formValues,
-        startTime: moment(formValues.startTime).format('DD/MM/YYYY'),
-        endTime: moment(formValues.endTime).format('DD/MM/YYYY'),
+        startTime: moment(formValues.startTime).format('MM/DD/YYYY'),
+        endTime: moment(formValues.endTime).format('MM/DD/YYYY'),
       },
     });
   };

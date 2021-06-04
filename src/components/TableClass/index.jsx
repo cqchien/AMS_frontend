@@ -97,9 +97,7 @@ class TableContact extends React.Component {
             //   onChange: this.onChangePaging,
             // }}
             bordered
-            loading={
-              this.props.isLoadingTableClass
-            }
+            loading={this.props.isLoadingTableClass}
           >
             <Column
               width={250}
@@ -117,12 +115,20 @@ class TableContact extends React.Component {
               title="Start Time"
               dataIndex="startTime"
               key="startTime"
+              sorter={(firstDate, secondDate) => {
+                return -moment(firstDate.updatedAt) + moment(secondDate.updatedAt);
+              }}
+              sortDirections={['ascend', 'descend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
             />
             <Column
               title="End Time"
               dataIndex="endTime"
               key="endTime"
+              sorter={(firstDate, secondDate) => {
+                return -moment(firstDate.updatedAt) + moment(secondDate.updatedAt);
+              }}
+              sortDirections={['ascend', 'descend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
             />
           </Table>
