@@ -7,6 +7,7 @@ const { Column } = Table;
 @connect(({ classRoom, loading }) => {
   return {
     listClasses: classRoom.classRooms,
+    metaPaging: classRoom.meta,
     isLoadingTableClass: loading.effects['classRoom/getAllClasses'],
   };
 })
@@ -66,36 +67,36 @@ class TableContact extends React.Component {
       });
   };
 
-  onChangePaging = (page) => {
+  onChangePaging = (currenPage) => {
     const { dispatch } = this.props;
     this.setState({
-      skip: page,
+      page: currenPage,
     });
     dispatch({
-      type: 'admin/queryContacts',
+      type: 'classRoom/getAllClasses',
       payload: {
-        search: '',
-        status: this.props.currentState,
-        skip: page,
-        limit: this.state.PAGE_SIZE,
+        order: this.state.order,
+        page: currenPage,
+        take: this.state.take,
+        isFinish: false,
       },
     });
   };
 
   render() {
-    const { listClasses } = this.props;
+    const { listClasses, metaPaging } = this.props;
     const listClassToRender = listClasses.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
     return (
       <div>
         <div>
           <Table
             dataSource={listClassToRender}
-            // pagination={{
-            //   current: this.state.skip,
-            //   pageSize: this.state.PAGE_SIZE,
-            //   total: totalContact,
-            //   onChange: this.onChangePaging,
-            // }}
+            pagination={{
+              current: this.state.page,
+              pageSize: this.state.take,
+              total: metaPaging?.itemCount,
+              onChange: this.onChangePaging,
+            }}
             bordered
             loading={this.props.isLoadingTableClass}
           >
