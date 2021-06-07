@@ -83,9 +83,17 @@ class TableContact extends React.Component {
     });
   };
 
+  handleData = (classes) => {
+    const classRooms = classes.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
+    return classRooms.sort(
+      (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+    );
+
+  };
+
   render() {
     const { listClasses, metaPaging } = this.props;
-    const listClassToRender = listClasses.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
+    const listClassToRender = this.handleData(listClasses);
     return (
       <div>
         <div>
