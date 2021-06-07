@@ -13,8 +13,6 @@ import styles from './ClassManagement.less';
   visibleClass: classRoom.visibleCreateClass,
 }))
 class ClassManagement extends React.Component {
-  state = { ClassID: '', visibleMergeClass: false };
-
   showDrawer = () => {
     const { dispatch } = this.props;
     dispatch({
@@ -25,9 +23,6 @@ class ClassManagement extends React.Component {
 
   showDrawerCreate = () => {
     const { dispatch } = this.props;
-    this.setState({
-      ClassID: '',
-    });
     dispatch({
       type: 'classRoom/handleVisibleCreateClass',
       payload: true,
@@ -89,14 +84,7 @@ class ClassManagement extends React.Component {
             </div>
           </div>
 
-          {visibleClass ? (
-            <DrawerForm
-              cancel={this.handleCancel}
-              visibleClass={visibleClass}
-              ClassID={this.state.ClassID}
-              deleteID={this.handleHandleID}
-            />
-          ) : null}
+          {visibleClass ? <DrawerForm visibleClass={visibleClass} /> : null}
 
           <TableClass />
         </div>

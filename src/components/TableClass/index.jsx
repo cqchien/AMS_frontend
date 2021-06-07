@@ -1,7 +1,8 @@
 import React from 'react';
-import { Table, message } from 'antd';
+import { Table, message, Tooltip } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import { ScheduleOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 @connect(({ classRoom, loading }) => {
@@ -88,7 +89,14 @@ class TableContact extends React.Component {
     return classRooms.sort(
       (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
+  };
 
+  showCheckinReport = (classRoom) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'checkin/handleVisibleGetCheckinReport',
+      payload: { classId: classRoom.id, isVisible: true },
+    });
   };
 
   render() {
@@ -139,6 +147,21 @@ class TableContact extends React.Component {
               }}
               sortDirections={['ascend', 'descend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
+            />
+            <Column
+              title="Action"
+              dataIndex="action"
+              key="action"
+              render={(text, record) => (
+                <div>
+                  <Tooltip title="Attendance Report">
+                    <ScheduleOutlined
+                      style={{ fontSize: '19px', color: '#33B3AB' }}
+                      onClick={() => this.showCheckinReport(record)}
+                    />
+                  </Tooltip>
+                </div>
+              )}
             />
           </Table>
         </div>
