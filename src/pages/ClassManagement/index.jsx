@@ -90,7 +90,7 @@ class ClassManagement extends React.Component {
                 onClick={this.showAddModal}
                 type="primary"
               >
-                Import
+                Template
               </Button>
             </div>
           </div>
