@@ -36,12 +36,6 @@
             iconPath: '/rocket.svg',
             component: './Welcome',
           },
-          {
-            path: '/management/account',
-            name: 'Account',
-            iconPath: '/fast.svg',
-            component: './Welcome',
-          },
         ],
       },
       // {
