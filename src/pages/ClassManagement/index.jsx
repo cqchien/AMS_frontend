@@ -79,7 +79,14 @@ class ClassManagement extends React.Component {
                 type="primary"
                 onClick={this.showDrawerCreate}
               >
-                <PlusOutlined size="small" /> New Class
+                <PlusOutlined size="small" /> Create New Class
+              </Button>
+              <Button
+                style={{ transform: 'translate(22%,-270%)' }}
+                onClick={this.showAddModal}
+                type="primary"
+              >
+                Template
               </Button>
             </div>
           </div>
