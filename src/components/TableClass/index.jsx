@@ -1,12 +1,14 @@
 import React from 'react';
-import { Table, message } from 'antd';
+import { Table, message, Tooltip } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import { ScheduleOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 @connect(({ classRoom, loading }) => {
   return {
     listClasses: classRoom.classRooms,
+    metaPaging: classRoom.meta,
     isLoadingTableClass: loading.effects['classRoom/getAllClasses'],
   };
 })
@@ -66,40 +68,53 @@ class TableContact extends React.Component {
       });
   };
 
-  onChangePaging = (page) => {
+  onChangePaging = (currenPage) => {
     const { dispatch } = this.props;
     this.setState({
-      skip: page,
+      page: currenPage,
     });
     dispatch({
-      type: 'admin/queryContacts',
+      type: 'classRoom/getAllClasses',
       payload: {
-        search: '',
-        status: this.props.currentState,
-        skip: page,
-        limit: this.state.PAGE_SIZE,
+        order: this.state.order,
+        page: currenPage,
+        take: this.state.take,
+        isFinish: false,
       },
     });
   };
 
+  handleData = (classes) => {
+    const classRooms = classes.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
+    return classRooms.sort(
+      (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+    );
+  };
+
+  showCheckinReport = (classRoom) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'checkin/handleVisibleGetCheckinReport',
+      payload: { classId: classRoom.id, isVisible: true },
+    });
+  };
+
   render() {
-    const { listClasses } = this.props;
-    const listClassToRender = listClasses.map((classRoom) => ({ ...classRoom, key: classRoom.id }));
+    const { listClasses, metaPaging } = this.props;
+    const listClassToRender = this.handleData(listClasses);
     return (
       <div>
         <div>
           <Table
             dataSource={listClassToRender}
-            // pagination={{
-            //   current: this.state.skip,
-            //   pageSize: this.state.PAGE_SIZE,
-            //   total: totalContact,
-            //   onChange: this.onChangePaging,
-            // }}
+            pagination={{
+              current: this.state.page,
+              pageSize: this.state.take,
+              total: metaPaging?.itemCount,
+              onChange: this.onChangePaging,
+            }}
             bordered
-            loading={
-              this.props.isLoadingTableClass
-            }
+            loading={this.props.isLoadingTableClass}
           >
             <Column
               width={250}
@@ -117,13 +132,36 @@ class TableContact extends React.Component {
               title="Start Time"
               dataIndex="startTime"
               key="startTime"
+              sorter={(firstDate, secondDate) => {
+                return -moment(firstDate.updatedAt) + moment(secondDate.updatedAt);
+              }}
+              sortDirections={['ascend', 'descend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
             />
             <Column
               title="End Time"
               dataIndex="endTime"
               key="endTime"
+              sorter={(firstDate, secondDate) => {
+                return -moment(firstDate.updatedAt) + moment(secondDate.updatedAt);
+              }}
+              sortDirections={['ascend', 'descend']}
               render={(date) => <span>{moment(date).format('DD/MM/YYYY')}</span>}
+            />
+            <Column
+              title="Action"
+              dataIndex="action"
+              key="action"
+              render={(text, record) => (
+                <div>
+                  <Tooltip title="Attendance Report">
+                    <ScheduleOutlined
+                      style={{ fontSize: '19px', color: '#33B3AB' }}
+                      onClick={() => this.showCheckinReport(record)}
+                    />
+                  </Tooltip>
+                </div>
+              )}
             />
           </Table>
         </div>

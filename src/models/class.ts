@@ -1,4 +1,5 @@
-import { getAllClasses } from '@/services/class';
+import { notification } from 'antd';
+import { getAllClasses, createNewClass } from '@/services/class';
 import type { Effect, Reducer } from './../.umi/plugin-dva/connect';
 
 export type ClassRoom = {
@@ -24,6 +25,7 @@ export type MetaData = {
 export type ClassRoomModelState = {
   classRooms?: ClassRoom[];
   meta?: MetaData;
+  visibleCreateClass?: boolean;
 };
 
 export type ClassRoomModelType = {
@@ -31,9 +33,11 @@ export type ClassRoomModelType = {
   state: ClassRoomModelState;
   effects: {
     getAllClasses: Effect;
+    createNewClass: Effect;
   };
   reducers: {
     showListClass: Reducer<ClassRoomModelState>;
+    handleVisibleCreateClass: Reducer<ClassRoomModelState>;
   };
 };
 
@@ -42,6 +46,7 @@ const ClassRoomModel: ClassRoomModelType = {
 
   state: {
     classRooms: [],
+    visibleCreateClass: false,
   },
 
   effects: {
@@ -52,6 +57,20 @@ const ClassRoomModel: ClassRoomModelType = {
         payload: response,
       });
     },
+
+    *createNewClass({ payload }, { call, put }) {
+      const response = yield call(createNewClass, payload);
+      if (response.courseCode) {
+        notification.success({
+          description: 'Create new class successfully.',
+          message: 'Create Successfully',
+        });
+        yield put({
+          type: 'handleVisibleCreateClass',
+          payload: false,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -60,6 +79,13 @@ const ClassRoomModel: ClassRoomModelType = {
         ...state,
         classRooms: payload.data,
         meta: payload.meta,
+      };
+    },
+
+    handleVisibleCreateClass(state, { payload }) {
+      return {
+        ...state,
+        visibleCreateClass: payload,
       };
     },
   },
